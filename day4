@@ -1,0 +1,370 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (18.7)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \l
+                                                            List of databases
+   Name    |  Owner   | Encoding | Locale Provider |      Collate       |       Ctype        | Locale | ICU Rules |   Access privileges
+-----------+----------+----------+-----------------+--------------------+--------------------+--------+-----------+-----------------------
+ college   | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ postgres  | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ student   | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ template0 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+           |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+           |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+(5 rows)
+
+
+postgres=# \c college
+You are now connected to database "college" as user "postgres".
+college=# create table student(
+college(# id serial primary key,
+college(# name varchar(100),
+college(# age int,
+college(# course varchar(50),
+college(# marks int);
+ERROR:  relation "student" already exists
+college=# delet student;
+ERROR:  syntax error at or near "delet"
+LINE 1: delet student;
+        ^
+college=# \dt
+              List of tables
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | student      | table | postgres
+ public | student_card | table | postgres
+ public | students     | table | postgres
+(3 rows)
+
+
+college=# drop table student;
+DROP TABLE
+college=# create table student(
+college(# id serial primary key,
+college(# name varchar(100),
+college(# age int,
+college(# course varchar(50),
+college(# marks int);
+CREATE TABLE
+college=# \dt
+              List of tables
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | student      | table | postgres
+ public | student_card | table | postgres
+ public | students     | table | postgres
+(3 rows)
+
+
+college=# insert into student(id,name,age,course,marks)
+college-# values
+college-# (1,'Thanu',19,'CSE',85),
+college-# (2,'Shree',20,'CSE',74),
+college-# (3,'Ravi',21,'ITI',68),
+college-# (4,'Tejas',21,'ECE',95),
+college-# (5,'vaishnavi','ISC',40),
+college-# (6,'Yashaswini','ECE',76),
+college-# (7,'Likhitha','ISC',98),
+college-# (8,'Harshini','ISC',88);
+ERROR:  VALUES lists must all be the same length
+LINE 7: (5,'vaishnavi','ISC',40),
+         ^
+college=# insert into student(id,name,age,course,marks)
+college-# values
+college-# (1,'Thanu',19,'CSE',85),
+college-# (2,'Shree',20,'CSE',74),
+college-# (3,'Ravi',21,'ITI',68),
+college-# (4,'Tejas',21,'ECE',95),
+college-# (5,'Vaishnavi',21,'ISC',40),
+college-# (6,'Yashaswini',21,'ECE',76),
+college-# (7,'Likhitha',21,'ISC',98),
+college-# (8,'Harshini',21,'ISC',88);
+INSERT 0 8
+college=# select *from student;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  1 | Thanu      |  19 | CSE    |    85
+  2 | Shree      |  20 | CSE    |    74
+  3 | Ravi       |  21 | ITI    |    68
+  4 | Tejas      |  21 | ECE    |    95
+  5 | Vaishnavi  |  21 | ISC    |    40
+  6 | Yashaswini |  21 | ECE    |    76
+  7 | Likhitha   |  21 | ISC    |    98
+  8 | Harshini   |  21 | ISC    |    88
+(8 rows)
+
+
+college=# select *from student
+college-# where marks>80;
+ id |   name   | age | course | marks
+----+----------+-----+--------+-------
+  1 | Thanu    |  19 | CSE    |    85
+  4 | Tejas    |  21 | ECE    |    95
+  7 | Likhitha |  21 | ISC    |    98
+  8 | Harshini |  21 | ISC    |    88
+(4 rows)
+
+
+college=# select * from student
+college-# order by marks desc;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  7 | Likhitha   |  21 | ISC    |    98
+  4 | Tejas      |  21 | ECE    |    95
+  8 | Harshini   |  21 | ISC    |    88
+  1 | Thanu      |  19 | CSE    |    85
+  6 | Yashaswini |  21 | ECE    |    76
+  2 | Shree      |  20 | CSE    |    74
+  3 | Ravi       |  21 | ITI    |    68
+  5 | Vaishnavi  |  21 | ISC    |    40
+(8 rows)
+
+
+college=# select * from student
+college-# order by marks asc;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  5 | Vaishnavi  |  21 | ISC    |    40
+  3 | Ravi       |  21 | ITI    |    68
+  2 | Shree      |  20 | CSE    |    74
+  6 | Yashaswini |  21 | ECE    |    76
+  1 | Thanu      |  19 | CSE    |    85
+  8 | Harshini   |  21 | ISC    |    88
+  4 | Tejas      |  21 | ECE    |    95
+  7 | Likhitha   |  21 | ISC    |    98
+(8 rows)
+
+
+college=# update student
+college-# set marks=92
+college-# where id=1;
+UPDATE 1
+college=# select * from student;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  2 | Shree      |  20 | CSE    |    74
+  3 | Ravi       |  21 | ITI    |    68
+  4 | Tejas      |  21 | ECE    |    95
+  5 | Vaishnavi  |  21 | ISC    |    40
+  6 | Yashaswini |  21 | ECE    |    76
+  7 | Likhitha   |  21 | ISC    |    98
+  8 | Harshini   |  21 | ISC    |    88
+  1 | Thanu      |  19 | CSE    |    92
+(8 rows)
+
+
+college=# update student
+college-# set marks=64
+college-# where id in(5,3,6);
+UPDATE 3
+college=# select * from student;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  2 | Shree      |  20 | CSE    |    74
+  4 | Tejas      |  21 | ECE    |    95
+  7 | Likhitha   |  21 | ISC    |    98
+  8 | Harshini   |  21 | ISC    |    88
+  1 | Thanu      |  19 | CSE    |    92
+  3 | Ravi       |  21 | ITI    |    64
+  5 | Vaishnavi  |  21 | ISC    |    64
+  6 | Yashaswini |  21 | ECE    |    64
+(8 rows)
+
+
+college=# update student
+college-# set marks=case
+college-# when id=2 then 80
+college-# when id=3 then 70
+college-# when id=5 then 68
+college-# end
+college-# where id in(2,3,5);
+UPDATE 3
+college=# select * from student;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  4 | Tejas      |  21 | ECE    |    95
+  7 | Likhitha   |  21 | ISC    |    98
+  8 | Harshini   |  21 | ISC    |    88
+  1 | Thanu      |  19 | CSE    |    92
+  6 | Yashaswini |  21 | ECE    |    64
+  2 | Shree      |  20 | CSE    |    80
+  3 | Ravi       |  21 | ITI    |    70
+  5 | Vaishnavi  |  21 | ISC    |    68
+(8 rows)
+
+
+college=# update student
+college-# set marks=marks+5;
+UPDATE 8
+college=# select * from student;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  4 | Tejas      |  21 | ECE    |   100
+  7 | Likhitha   |  21 | ISC    |   103
+  8 | Harshini   |  21 | ISC    |    93
+  1 | Thanu      |  19 | CSE    |    97
+  6 | Yashaswini |  21 | ECE    |    69
+  2 | Shree      |  20 | CSE    |    85
+  3 | Ravi       |  21 | ITI    |    75
+  5 | Vaishnavi  |  21 | ISC    |    73
+(8 rows)
+
+
+college=# delete from student
+college-# where id=5;
+DELETE 1
+college=# select * from student;
+ id |    name    | age | course | marks
+----+------------+-----+--------+-------
+  4 | Tejas      |  21 | ECE    |   100
+  7 | Likhitha   |  21 | ISC    |   103
+  8 | Harshini   |  21 | ISC    |    93
+  1 | Thanu      |  19 | CSE    |    97
+  6 | Yashaswini |  21 | ECE    |    69
+  2 | Shree      |  20 | CSE    |    85
+  3 | Ravi       |  21 | ITI    |    75
+(7 rows)
+
+
+college=# select * from student
+college-# limit 2;
+ id |   name   | age | course | marks
+----+----------+-----+--------+-------
+  4 | Tejas    |  21 | ECE    |   100
+  7 | Likhitha |  21 | ISC    |   103
+(2 rows)
+
+
+college=# select * from student
+college-# order by marks desc
+college-# limit 2;
+ id |   name   | age | course | marks
+----+----------+-----+--------+-------
+  7 | Likhitha |  21 | ISC    |   103
+  4 | Tejas    |  21 | ECE    |   100
+(2 rows)
+
+
+college=# select count(*)
+college-# from student;
+ count
+-------
+     7
+(1 row)
+
+
+college=# select count(*)
+college-# from student
+college-# where course='cse';
+ count
+-------
+     0
+(1 row)
+
+
+college=# select course,count(*)
+college-# from student
+college-# group by course;
+ course | count
+--------+-------
+ CSE    |     2
+ ECE    |     2
+ ISC    |     2
+ ITI    |     1
+(4 rows)
+
+
+college=# select course,max(marks)
+college-# from student
+college-# group by course;
+ course | max
+--------+-----
+ CSE    |  97
+ ECE    | 100
+ ISC    | 103
+ ITI    |  75
+(4 rows)
+
+
+college=# drop table student;
+DROP TABLE
+college=# create table department(
+college(# department_id serial primary key,
+college(# department_name varchar(100);
+college(# );
+ERROR:  syntax error at or near ";"
+LINE 3: department_name varchar(100);
+                                    ^
+college=# create table department(
+college(# department_id serial primary key,
+college(# department_name varchar(100));
+CREATE TABLE
+college=# insert into department(department_name)
+college-# values
+college-# ('cse'),
+college-# ('mech'),
+college-# ('aiml'),
+college-# ('isc');
+INSERT 0 4
+college=# select * from department;
+ department_id | department_name
+---------------+-----------------
+             1 | cse
+             2 | mech
+             3 | aiml
+             4 | isc
+(4 rows)
+
+
+college=# create table new(
+college(# employee_id serial primary key,
+college(# employee_name varchar(100),
+college(# salary int,
+college(# department_id init );
+ERROR:  type "init" does not exist
+LINE 5: department_id init );
+                      ^
+college=# create table employee(
+college(# employee_id serial primary key,
+college(# employee_name varchar(100),
+college(# salary int,
+college(# department_id int referenes department(department_id)
+college(# );
+ERROR:  syntax error at or near "referenes"
+LINE 5: department_id int referenes department(department_id)
+                          ^
+college=# create table employee(
+college(# employee_id serial primary key,
+college(# employee_name varchar(100),
+college(# salary int,
+college(# department_id int references department(department_id)
+college(# );
+CREATE TABLE
+college=# insert into employee(employee_name,salary,department_id)
+college-# values
+college-# ('rahul',10000,1),
+college-# ('ravi',15000,2),
+college-# ('shree',20000,2),
+college-# ('thanu',25000,3);
+INSERT 0 4
+college=# select * from employee;
+ employee_id | employee_name | salary | department_id
+-------------+---------------+--------+---------------
+           1 | rahul         |  10000 |             1
+           2 | ravi          |  15000 |             2
+           3 | shree         |  20000 |             2
+           4 | thanu         |  25000 |             3
+(4 rows)
+
+
+college=#
